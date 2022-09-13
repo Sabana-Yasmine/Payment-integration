@@ -3,11 +3,12 @@ const braintree = require ("braintree")
 const cors = require  ("cors")
 const {response} = require ("express")
 const app = express();
+require('dotenv').config()
  
 app.use(express.json());
 
 const config = {
-    envirionment : braintree.Environment.Sandbox,
+    environment : braintree.Environment.Sandbox,
     merchantId : process.env.merchantId,
     publicKey : process.env.publicKey,
     privateKey : process.env.privateKey
@@ -35,14 +36,14 @@ const config = {
  app.post('/transaction', async(req, res) => {
    
     try {
-        const paymentDetail = gateway.tarnsction.sale({amount : req.body.amount,
+        const paymentDetail = gateway.transaction.sale({amount : req.body.amount,
             paymentMethodNonce :req.body.paymentMethodNonce,
             options : 
             {
                submitForSettlement :true
             }
-           } ,(err,response) => {
-            if(response.succes){
+           } ,(err, response) => {
+            if(response.success){
                 return res.json({"status" : "success", "message" : response.transaction} )
             }else{
                 return res.send({err : err})
